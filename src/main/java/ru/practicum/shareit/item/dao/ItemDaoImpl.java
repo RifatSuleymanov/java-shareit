@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.dao;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.OwnerException;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class ItemDaoImpl implements ItemDao {
         checkIdItemStorage(itemId);
         Item originalItem = itemStorage.get(itemId);
         if (!originalItem.getOwner().equals(item.getOwner())) {
-            throw new NotFoundException("Вы не можете редактировать чужие объявления");
+            throw new OwnerException("Вы не являетесь владелцем этого объявления");
         }
         if (item.getName() != null) {
             originalItem.setName(item.getName());

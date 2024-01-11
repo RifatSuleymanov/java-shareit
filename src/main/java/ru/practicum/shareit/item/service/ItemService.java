@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dao.ItemDao;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -12,15 +13,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ItemService {
     public final ItemDao itemDao;
     private final UserDao userDao;
-
-    public ItemService(ItemDao itemDao, UserDao userDao) {
-        this.itemDao = itemDao;
-        this.userDao = userDao;
-    }
-
 
     public ItemDto addItems(ItemDto itemDto, int ownerId) {
         userDao.checkIdUserStorage(ownerId);

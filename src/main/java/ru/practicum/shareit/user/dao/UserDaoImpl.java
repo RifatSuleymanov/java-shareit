@@ -1,7 +1,7 @@
 package ru.practicum.shareit.user.dao;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.exception.Conflict;
+import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.model.User;
 
@@ -30,11 +30,9 @@ public class UserDaoImpl implements UserDao {
         if (user.getName() != null) {
             originalUser.setName(user.getName());
         }
-        if (user.getEmail() != null) {
-            if (!user.getEmail().equals(originalUser.getEmail())) {
-                checkEmailUserStorage(user);
-                originalUser.setEmail(user.getEmail());
-            }
+        if (user.getEmail() != null && !user.getEmail().equals(originalUser.getEmail())) {
+            checkEmailUserStorage(user);
+            originalUser.setEmail(user.getEmail());
         }
         return originalUser;
     }
@@ -66,7 +64,7 @@ public class UserDaoImpl implements UserDao {
     private void checkEmailUserStorage(User user) {
         for (User originalUser : userStorage.values()) {
             if (originalUser.getEmail().equals(user.getEmail())) {
-                throw new Conflict("Эта почт уже занята");
+                throw new ConflictException("Эта почта уже занята");
             }
         }
     }

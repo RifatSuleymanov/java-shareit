@@ -1,7 +1,7 @@
 package ru.practicum.shareit.item;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,15 +22,11 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@AllArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
     private static final String OWNER_ID = "X-Sharer-User-Id";
     private ItemService itemService;
-
-    @Autowired
-    public ItemController(ItemService itemService) {
-        this.itemService = itemService;
-    }
 
     @PostMapping // addItems Добавление новой вещи
     public ItemDto addItems(@Valid @RequestBody ItemDto itemDto, @RequestHeader(OWNER_ID) int ownerId) {
