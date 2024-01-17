@@ -25,6 +25,4 @@ public interface BookingDao {
     Optional<Booking> getNext(int id);
 
     void checkUserBooking(Integer userId, Integer itemId);
-
-
 }
