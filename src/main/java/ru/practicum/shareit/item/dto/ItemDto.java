@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * TODO Sprint add-controllers.
  */
 @Data
-public class ItemDto {
+public final class ItemDto {
     private int id; // уникальный идентификатор вещи
     @NotBlank
     private String name; // краткое название
