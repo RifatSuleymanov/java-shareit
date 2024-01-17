@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.InputBookingDto;
+import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.services.BookingService;
 
 import javax.validation.Valid;
@@ -23,16 +25,12 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@AllArgsConstructor
 @RequestMapping(path = "/bookings")
 public class BookingController {
-    private static final String OWNER_ID = "X-Sharer-User-Id";
+    private final String OWNER_ID = "X-Sharer-User-Id";
 
     private final BookingService bookingService;
-
-    @Autowired
-    public BookingController(BookingService bookingService) {
-        this.bookingService = bookingService;
-    }
 
     @PostMapping
     public BookingDto addBooking(@Valid @RequestBody InputBookingDto inputBookingDto, @RequestHeader(OWNER_ID) Integer userId) { // Добавление нового запроса на бронирование.

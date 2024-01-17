@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 @Component
 @RequiredArgsConstructor
 public class BookingDaoImpl implements BookingDao {
@@ -55,32 +56,32 @@ public class BookingDaoImpl implements BookingDao {
     @Override
     public List<Booking> getAllBookingOneUser(User user, String state) {
         List<Booking> bookingList = new ArrayList<>();
-        switch (BookingStatus.valueOf(state)) {
-            case ALL:
+        switch (state) {
+            case "ALL":
                 bookingList.addAll(bookingRepository.findAllByBookerOrderByStartDesc(user));
                 break;
-            case CURRENT:
+            case "CURRENT":
                 bookingList.addAll(bookingRepository.findAllByBookerAndStartBeforeAndEndAfterOrderByStartDesc(
                         user, LocalDateTime.now(), LocalDateTime.now()));
                 break;
-            case PAST:
+            case "PAST":
                 bookingList.addAll(bookingRepository.findAllByBookerAndEndBeforeOrderByStartDesc(
                         user, LocalDateTime.now()));
                 break;
-            case FUTURE:
+            case "FUTURE":
                 bookingList.addAll(bookingRepository.findAllByBookerAndStartAfterOrderByStartDesc(
                         user, LocalDateTime.now()));
                 break;
-            case WAITING:
+            case "WAITING":
                 bookingList.addAll(bookingRepository.findAllByBookerAndStatusEqualsOrderByStartDesc(
                         user, BookingStatus.WAITING));
                 break;
-            case REJECTED:
+            case "REJECTED":
                 bookingList.addAll(bookingRepository.findAllByBookerAndStatusEqualsOrderByStartDesc(
                         user, BookingStatus.REJECTED));
                 break;
             default:
-                throw new UnknownStateException("Unknown state: " + BookingStatus.UNSUPPORTED_STATUS);
+                throw new UnknownStateException("Unknown state:" + BookingStatus.UNSUPPORTED_STATUS);
         }
         return bookingList;
     }
@@ -89,27 +90,27 @@ public class BookingDaoImpl implements BookingDao {
     @Override
     public List<Booking> getAllBookingOneOwner(User user, String state) {
         List<Booking> bookingList = new ArrayList<>();
-        switch (BookingStatus.valueOf(state)) {
-            case ALL:
+        switch (state) {
+            case "ALL":
                 bookingList.addAll(bookingRepository.findAllByItemOwnerOrderByStartDesc(user));
                 break;
-            case CURRENT:
+            case "CURRENT":
                 bookingList.addAll(bookingRepository.findAllByItemOwnerAndStartBeforeAndEndAfterOrderByStartDesc(
                         user, LocalDateTime.now(), LocalDateTime.now()));
                 break;
-            case PAST:
+            case "PAST":
                 bookingList.addAll(bookingRepository.findAllByItemOwnerAndEndBeforeOrderByStartDesc(
                         user, LocalDateTime.now()));
                 break;
-            case FUTURE:
+            case "FUTURE":
                 bookingList.addAll(bookingRepository.findAllByItemOwnerAndStartAfterOrderByStartDesc(
                         user, LocalDateTime.now()));
                 break;
-            case WAITING:
+            case "WAITING":
                 bookingList.addAll(bookingRepository.findAllByItemOwnerAndStatusEqualsOrderByStartDesc(
                         user, BookingStatus.WAITING));
                 break;
-            case REJECTED:
+            case "REJECTED":
                 bookingList.addAll(bookingRepository.findAllByItemOwnerAndStatusEqualsOrderByStartDesc(
                         user, BookingStatus.REJECTED));
                 break;

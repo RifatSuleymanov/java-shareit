@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.dao;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ItemDaoImpl implements ItemDao {
     private final ItemRepository itemRepository;
     private final CommentRepository commentRepository;
