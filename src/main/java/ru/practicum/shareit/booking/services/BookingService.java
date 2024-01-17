@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.services;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dao.BookingDao;
@@ -20,11 +19,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class BookingService {
     private final BookingDao bookingDao;
     private final UserDao userDao;
     private final ItemDao itemDao;
+
+    public BookingService(BookingDao bookingDao, UserDao userDao, ItemDao itemDao) {
+        this.bookingDao = bookingDao;
+        this.userDao = userDao;
+        this.itemDao = itemDao;
+    }
 
     @Transactional
     public BookingDto addBooking(InputBookingDto inputBookingDto, Integer userId) {
@@ -41,7 +45,7 @@ public class BookingService {
 
     @Transactional
     public BookingDto responseToRequest(int bookingId, int userId, Boolean answer) {
-        BookingDto dto =  BookingMapper.toBookingDto(bookingDao.getBookingById(bookingId));
+        BookingDto dto = BookingMapper.toBookingDto(bookingDao.getBookingById(bookingId));
         if (dto.getItem().getOwner().getId() != userId) {
             throw new NotFoundException("вы не можете одобрять чужие заявки");
         } else if (!dto.getStatus().equals(BookingStatus.WAITING)) {
