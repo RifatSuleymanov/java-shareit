@@ -1,7 +1,5 @@
 package ru.practicum.shareit.booking;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +30,7 @@ public class BookingController {
     private final BookingService bookingService;
 
     @Autowired
-    public BookingController(BookingService bookingService){
+    public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
     }
 
