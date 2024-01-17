@@ -1,78 +1,88 @@
 package ru.practicum.shareit.item.dao;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.OwnerException;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.CommentRepository;
+import ru.practicum.shareit.item.repository.ItemRepository;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class ItemDaoImpl implements ItemDao {
-    private int nextItemId = 1;
-    public Map<Integer, Item> itemStorage = new HashMap<>(); // хранение вещей в памяти
+    private final ItemRepository itemRepository;
+    private final CommentRepository commentRepository;
 
 
     @Override
+    @Transactional
     public Item addItems(Item item) {
-        item.setId(nextItemId++);
-        itemStorage.put(item.getId(), item);
-        return item;
+        return itemRepository.save(item);
     }
 
     @Override
+    @Transactional
     public Item updateItems(int itemId, Item item) {
-        checkIdItemStorage(itemId);
-        Item originalItem = itemStorage.get(itemId);
-        if (!originalItem.getOwner().equals(item.getOwner())) {
-            throw new OwnerException("Вы не являетесь владелцем этого объявления");
+        Item originalItem = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("по вашему id не была найдена вешь"));
+        if (originalItem.getOwner().getId() != item.getOwner().getId()) {
+            throw new OwnerException("вы не можете редактировать чужие объявления");
         }
-        if (item.getName() != null) {
-            originalItem.setName(item.getName());
-        }
-        if (item.getDescription() != null) {
-            originalItem.setDescription(item.getDescription());
-        }
-        if (item.getAvailable() != null) {
-            originalItem.setAvailable(item.getAvailable());
-        }
-        return originalItem;
+        Optional.ofNullable(item.getName()).ifPresent(originalItem::setName);
+        Optional.ofNullable(item.getDescription()).ifPresent(originalItem::setDescription);
+        Optional.ofNullable(item.getAvailable()).ifPresent(originalItem::setAvailable);
+        return itemRepository.save(originalItem);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Item getItemsById(int itemId) {
-        checkIdItemStorage(itemId);
-        return itemStorage.get(itemId);
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("по вашему id не была найдена вещб"));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Item> getAllItemsOneUser(int ownerId) {
-        return itemStorage.values()
+        return itemRepository.findAll()
                 .stream()
-                .filter(item -> item.getOwner() == ownerId)
+                .filter(item -> item.getOwner().getId() == ownerId)
                 .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public List<Item> searchItemByText(String text) {
-        return itemStorage.values()
+        return itemRepository.findAll()
                 .stream()
                 .filter(Item::getAvailable)
                 .filter(item -> containsText(item, text))
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
+    public Comment addComment(Comment comment) {
+        comment.setCreated(LocalDateTime.now()); // максимальная свежая дата перед добавлением в бд
+        return commentRepository.save(comment);
+    }
+
+    @Override
+    @Transactional
+    public List<Comment> getAllCommentOneItem(int id) {
+        return commentRepository.findByItemId(id);
+    }
+
     private boolean containsText(Item item, String text) {
         return item.getName().toLowerCase().contains(text.toLowerCase()) ||
                 item.getDescription().toLowerCase().contains(text.toLowerCase());
-    }
-
-    private void checkIdItemStorage(int id) {
-        if (!itemStorage.containsKey(id)) {
-            throw new NotFoundException("По вашему id не была найдена вещь");
-        }
     }
 }
