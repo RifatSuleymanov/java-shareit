@@ -26,7 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
-    private final String OWNER_ID = "X-Sharer-User-Id";
+    private static final String OWNER_ID = "X-Sharer-User-Id";
     private ItemService itemService;
 
     @PostMapping // addItems Добавление новой вещи

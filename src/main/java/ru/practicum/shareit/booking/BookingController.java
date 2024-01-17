@@ -26,7 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping(path = "/bookings")
 public class BookingController {
-    private final String OWNER_ID = "X-Sharer-User-Id";
+    private static final String OWNER_ID = "X-Sharer-User-Id";
 
     private final BookingService bookingService;
 
