@@ -19,7 +19,7 @@ public class ErrorController {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handlerOwnerException(final OwnerException e) {
         return new ErrorResponse("NOT FOUND", e.getMessage());
     }
