@@ -7,10 +7,10 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class UserDto {
-    private final int id;
+    private int id;
     @NotBlank
-    private final String name;
+    private String name;
     @NotBlank(message = "почта не может быть пустой")
     @Email(message = "не корректно указанная почта")
-    private final String email;
+    private String email;
 }

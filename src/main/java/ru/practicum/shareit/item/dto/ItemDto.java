@@ -10,13 +10,13 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public final class ItemDto {
-    private final int id; // уникальный идентификатор вещи
+    private int id; // уникальный идентификатор вещи
     @NotBlank
-    private final String name; // краткое название
+    private String name; // краткое название
     @NotBlank
-    private final String description; // развернутое описание
+    private String description; // развернутое описание
     @NotNull
-    private final Boolean available; // статус о том, доступна ли этот вещь для аренты
-    private final Integer request; // если вещь была создана по запросу другого пользователя, то в этом поле будет
+    private Boolean available; // статус о том, доступна ли этот вещь для аренты
+    private Integer request; // если вещь была создана по запросу другого пользователя, то в этом поле будет
     // хранится ссылка на соответсвующий запрос
 }
