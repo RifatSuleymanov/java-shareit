@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.services;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dao.BookingDao;
@@ -19,16 +20,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class BookingService {
     private final BookingDao bookingDao;
     private final UserDao userDao;
     private final ItemDao itemDao;
-
-    public BookingService(BookingDao bookingDao, UserDao userDao, ItemDao itemDao) {
-        this.bookingDao = bookingDao;
-        this.userDao = userDao;
-        this.itemDao = itemDao;
-    }
 
     @Transactional
     public BookingDto addBooking(InputBookingDto inputBookingDto, Integer userId) {

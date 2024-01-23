@@ -1,6 +1,9 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import ru.practicum.shareit.booking.dto.InputBookingDto;
 
 import javax.validation.constraints.NotBlank;
@@ -10,7 +13,10 @@ import java.util.List;
 /**
  * TODO Sprint add-controllers.
  */
-@Data
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor(force = true)
 public final class ItemDto {
     private int id; // уникальный идентификатор вещи
     @NotBlank
