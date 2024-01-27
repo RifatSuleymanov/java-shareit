@@ -1,71 +1,52 @@
 package ru.practicum.shareit.user.dao;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.exception.ConflictException;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
-    private int nextUserId = 1;
-    public Map<Integer, User> userStorage = new HashMap<>(); // хранение юзеров в памяти
+    private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public User addUser(User user) {
-        checkEmailUserStorage(user);
-        user.setId(nextUserId++);
-        userStorage.put(user.getId(), user);
-        return user;
+        return userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public User updateUser(User user, int id) {
-        checkIdUserStorage(id);
-        User originalUser = userStorage.get(id);
-        if (user.getName() != null) {
-            originalUser.setName(user.getName());
-        }
-        if (user.getEmail() != null && !user.getEmail().equals(originalUser.getEmail())) {
-            checkEmailUserStorage(user);
-            originalUser.setEmail(user.getEmail());
-        }
-        return originalUser;
+        User originalUser = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("по вашему id не найден пользователь"));
+        Optional.ofNullable(user.getEmail()).ifPresent(originalUser::setEmail);
+        Optional.ofNullable(user.getName()).ifPresent(originalUser::setName);
+        return userRepository.save(originalUser);
     }
 
     @Override
-    public User getUserByUd(int id) {
-        checkIdUserStorage(id);
-        return userStorage.get(id);
+    @Transactional(readOnly = true)
+    public User getUserById(int id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("по вашему id не было найден пользователь"));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getAllUser() {
-        return new ArrayList<>(userStorage.values());
+        return userRepository.findAll();
     }
 
     @Override
+    @Transactional
     public void deleteUser(int id) {
-        checkIdUserStorage(id);
-        userStorage.remove(id);
-    }
-
-    @Override
-    public void checkIdUserStorage(int id) {
-        if (!userStorage.containsKey(id)) {
-            throw new NotFoundException("по вашему id не было найдено пользователя");
-        }
-    }
-
-    private void checkEmailUserStorage(User user) {
-        for (User originalUser : userStorage.values()) {
-            if (originalUser.getEmail().equals(user.getEmail())) {
-                throw new ConflictException("Эта почта уже занята");
-            }
-        }
+        userRepository.deleteById(id);
     }
 }

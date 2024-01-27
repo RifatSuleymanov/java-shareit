@@ -1,14 +1,22 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import ru.practicum.shareit.booking.dto.InputBookingDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * TODO Sprint add-controllers.
  */
-@Data
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor(force = true)
 public final class ItemDto {
     private int id; // уникальный идентификатор вещи
     @NotBlank
@@ -17,6 +25,8 @@ public final class ItemDto {
     private String description; // развернутое описание
     @NotNull
     private Boolean available; // статус о том, доступна ли этот вещь для аренты
-    private Integer request; // если вещь была создана по запросу другого пользователя, то в этом поле будет
-    // хранится ссылка на соответсвующий запрос
+    private List<CommentDto> comments;
+    private InputBookingDto lastBooking;
+    private InputBookingDto nextBooking;
+
 }
