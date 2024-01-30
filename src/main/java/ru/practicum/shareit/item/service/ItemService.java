@@ -62,13 +62,15 @@ public class ItemService {
 
     @Transactional(readOnly = true)
     public List<ItemDto> getAllItemsOneUser(int ownerId, int from, int size) {
-        return itemDao.getAllItemsOneUser(ownerId, from, size)
-                .stream()
+        List<Item> items = itemDao.getAllItemsOneUser(ownerId, from, size);
+
+        return items.stream()
                 .map(ItemMapper::toItemDto)
                 .map(this::setDtoComments)
                 .map(this::setDtoNextAndLast)
                 .collect(Collectors.toList());
     }
+
 
     @Transactional(readOnly = true)
     public List<ItemDto> searchItemByText(String text, int from, int size) {
@@ -91,27 +93,22 @@ public class ItemService {
     }
 
     private ItemDto setDtoComments(ItemDto dto) {
-        dto.setComments(itemDao.getAllCommentOneItem(dto.getId())
-                .stream()
-                .map(CommentMapper::toCommentDto)
-                .collect(Collectors.toList()));
+        List<Comment> comments = itemDao.getAllCommentOneItem(dto.getId());
+        List<CommentDto> commentDto = new ArrayList<>();
+        for (Comment comment : comments) {
+            commentDto.add(CommentMapper.toCommentDto(comment));
+        }
+        dto.setComments(commentDto);
         return dto;
     }
 
-    @Transactional
     public ItemDto setDtoNextAndLast(ItemDto dto) {
-        Optional<Booking> lastBooking = bookingDao.getLast(dto.getId());
-        Optional<Booking> nextBooking = bookingDao.getNext(dto.getId());
-        if (lastBooking.isPresent()) {
-            dto.setLastBooking(BookingMapper.toInputBookingDto(lastBooking.get()));
-        } else {
-            dto.setLastBooking(null);
-        }
-        if (nextBooking.isPresent()) {
-            dto.setNextBooking(BookingMapper.toInputBookingDto(nextBooking.get()));
-        } else {
-            dto.setNextBooking(null);
-        }
+        Optional<Booking> lastBookingOpt = bookingDao.getLast(dto.getId());
+        Optional<Booking> nextBookingOpt = bookingDao.getNext(dto.getId());
+
+        dto.setLastBooking(lastBookingOpt.map(BookingMapper::toInputBookingDto).orElse(null));
+        dto.setNextBooking(nextBookingOpt.map(BookingMapper::toInputBookingDto).orElse(null));
+
         return dto;
     }
 }

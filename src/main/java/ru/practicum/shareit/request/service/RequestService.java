@@ -11,6 +11,7 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dao.UserDao;
 import ru.practicum.shareit.user.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,21 +30,25 @@ public class RequestService {
 
     public List<ItemRequestDto> getAllRequestOneUser(int requesterId) {
         User user = userDao.getUserById(requesterId);
-        List<ItemRequestDto> listDto = requestDao.getAllRequestOneUser(requesterId)
-                .stream()
-                .map(RequestMapper::toRequestDto)
-                .collect(Collectors.toList());
-        listDto.forEach(this::setRequestItems);
+        List<ItemRequest> requests = requestDao.getAllRequestOneUser(requesterId);
+        List<ItemRequestDto> listDto = new ArrayList<>();
+        for (ItemRequest request : requests) {
+            ItemRequestDto dto = RequestMapper.toRequestDto(request);
+            setRequestItems(dto);
+            listDto.add(dto);
+        }
         return listDto;
     }
 
     public List<ItemRequestDto> getRequestAllUser(int requesterId, int from, int size) {
         User user = userDao.getUserById(requesterId);
-        List<ItemRequestDto> listDto = requestDao.getRequestsAllUser(user, from, size)
-                .stream()
-                .map(RequestMapper::toRequestDto)
-                .collect(Collectors.toList());
-        listDto.forEach(this::setRequestItems);
+        List<ItemRequest> requests = requestDao.getRequestsAllUser(user, from, size);
+        List<ItemRequestDto> listDto = new ArrayList<>();
+        for (ItemRequest request : requests) {
+            ItemRequestDto dto = RequestMapper.toRequestDto(request);
+            setRequestItems(dto);
+            listDto.add(dto);
+        }
         return listDto;
     }
 
