@@ -13,6 +13,7 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,7 @@ public class ItemDaoImpl implements ItemDao {
     public Item updateItem(int itemId, Item item) {
         Item originalItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("по вашему id не была найдена вешь"));
-        if (originalItem.getOwner().getId() != item.getOwner().getId()) {
+        if (!Objects.equals(originalItem.getOwner().getId(), item.getOwner().getId())) {
             throw new OwnerException("вы не можете редактировать чужие объявления");
         }
         Optional.ofNullable(item.getName()).ifPresent(originalItem::setName);
