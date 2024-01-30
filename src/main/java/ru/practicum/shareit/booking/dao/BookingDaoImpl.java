@@ -11,7 +11,6 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.OwnerException;
 import ru.practicum.shareit.exception.UnknownStateException;
 import ru.practicum.shareit.user.model.User;
 
@@ -50,7 +49,7 @@ public class BookingDaoImpl implements BookingDao {
     public Booking getInfoBooking(int id, int userId) {
         Booking booking = getBookingById(id);
         if (userId != booking.getBooker().getId() && userId != booking.getItem().getOwner().getId()) {
-            throw new OwnerException("вы не можете смотреть чужие запросы");
+            throw new NotFoundException("вы не можете смотреть чужие запросы");
         }
         return booking;
     }

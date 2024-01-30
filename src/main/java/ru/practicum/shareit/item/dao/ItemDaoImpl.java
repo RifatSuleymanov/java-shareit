@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.OwnerException;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
@@ -36,7 +35,7 @@ public class ItemDaoImpl implements ItemDao {
         Item originalItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("по вашему id не была найдена вешь"));
         if (!Objects.equals(originalItem.getOwner().getId(), item.getOwner().getId())) {
-            throw new OwnerException("вы не можете редактировать чужие объявления");
+            throw new NotFoundException("вы не можете редактировать чужие объявления");
         }
         Optional.ofNullable(item.getName()).ifPresent(originalItem::setName);
         Optional.ofNullable(item.getDescription()).ifPresent(originalItem::setDescription);
