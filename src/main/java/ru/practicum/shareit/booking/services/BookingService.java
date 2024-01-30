@@ -28,7 +28,7 @@ public class BookingService {
 
     @Transactional
     public BookingDto addBooking(InputBookingDto inputBookingDto, Integer userId) {
-        Item item = itemDao.getItemsById(inputBookingDto.getItemId());
+        Item item = itemDao.getItemById(inputBookingDto.getItemId());
         if (!item.getAvailable()) {
             throw new BadRequestException("предмет не доступен для аренды");
         } else if (item.getOwner().getId() == userId) {
@@ -56,17 +56,23 @@ public class BookingService {
         return BookingMapper.toBookingDto(bookingDao.getInfoBooking(bookingId, userId));
     }
 
-    public List<BookingDto> getAllBookingOneUser(int userId, String state) {
+    public List<BookingDto> getAllBookingOneUser(int userId, String state, int from, int size) {
         User user = userDao.getUserById(userId);
-        return bookingDao.getAllBookingOneUser(user, state)
+        if (from < 0) {
+            throw new BadRequestException("from не может быть отрицательным");
+        }
+        return bookingDao.getAllBookingOneUser(user, state, from, size)
                 .stream()
                 .map(BookingMapper::toBookingDto)
                 .collect(Collectors.toList());
     }
 
-    public List<BookingDto> getAllBookingOneOwner(int userId, String state) {
+    public List<BookingDto> getAllBookingOneOwner(int userId, String state, int from, int size) {
         User user = userDao.getUserById(userId);
-        return bookingDao.getAllBookingOneOwner(user, state)
+        if (from < 0) {
+            throw new BadRequestException("from не может быть отрицательным");
+        }
+        return bookingDao.getAllBookingOneOwner(user, state, from, size)
                 .stream()
                 .map(BookingMapper::toBookingDto)
                 .collect(Collectors.toList());

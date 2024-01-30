@@ -16,6 +16,8 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -30,13 +32,13 @@ public class ItemController {
     private ItemService itemService;
 
     @PostMapping // addItems Добавление новой вещи
-    public ItemDto addItems(@Valid @RequestBody ItemDto itemDto, @RequestHeader(OWNER_ID) int ownerId) {
+    public ItemDto addItems(@Valid @RequestBody ItemDto itemDto, @RequestHeader(OWNER_ID) Integer ownerId) {
         log.info("метод addItems . userId " + ownerId);
         return itemService.addItems(itemDto, ownerId);
     }
 
     @PatchMapping("/{itemId}") // updateItems Редактирование вещи
-    public ItemDto updateItems(@PathVariable Integer itemId, @RequestBody ItemDto itemDto, @RequestHeader(OWNER_ID) int ownerId) {
+    public ItemDto updateItems(@PathVariable Integer itemId, @RequestBody ItemDto itemDto, @RequestHeader(OWNER_ID) Integer ownerId) {
         log.info("метод updateItems . userId " + ownerId + " itemId " + itemId);
         return itemService.updateItems(itemId, itemDto, ownerId);
     }
@@ -48,15 +50,19 @@ public class ItemController {
     }
 
     @GetMapping // getAllItemsOneUser просмотр владельцем списка всех его вещей
-    public List<ItemDto> getAllItemsOneUser(@RequestHeader(OWNER_ID) int ownerId) {
+    public List<ItemDto> getAllItemsOneUser(@RequestHeader(OWNER_ID) int ownerId,
+                                            @PositiveOrZero @RequestParam(defaultValue = "0", required = false) Integer from,
+                                            @Positive @RequestParam(defaultValue = "20", required = false) Integer size) {
         log.info("метод getAllItemsOneUser . userId " + ownerId);
-        return itemService.getAllItemsOneUser(ownerId);
+        return itemService.getAllItemsOneUser(ownerId, from, size);
     }
 
     @GetMapping("/search") // поиск вещей потенциальным арендатором
-    public List<ItemDto> searchItemByText(@RequestParam String text) {
+    public List<ItemDto> searchItemByText(@RequestParam String text,
+                                          @PositiveOrZero @RequestParam(defaultValue = "0", required = false) Integer from,
+                                          @Positive @RequestParam(defaultValue = "20", required = false) Integer size) {
         log.info("метод searchItemByText");
-        return itemService.searchItemByText(text);
+        return itemService.searchItemByText(text, from, size);
     }
 
     @PostMapping("/{itemId}/comment")

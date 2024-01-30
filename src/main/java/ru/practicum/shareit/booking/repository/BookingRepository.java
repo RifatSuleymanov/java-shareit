@@ -1,44 +1,45 @@
 package ru.practicum.shareit.booking.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
-    List<Booking> findAllByBookerOrderByStartDesc(User booker); // ALL
+    Page<Booking> findAllByBookerOrderByStartDesc(User booker, Pageable pageable); // ALL
 
-    List<Booking> findAllByBookerAndStartBeforeAndEndAfterOrderByStartDesc(
-            User booker, LocalDateTime start, LocalDateTime end); // CURRENT
+    Page<Booking> findAllByBookerAndStartBeforeAndEndAfterOrderByStartDesc(
+            User booker, LocalDateTime start, LocalDateTime end, Pageable pageable); // CURRENT
 
-    List<Booking> findAllByBookerAndEndBeforeOrderByStartDesc(
-            User booker, LocalDateTime end); // PAST
+    Page<Booking> findAllByBookerAndEndBeforeOrderByStartDesc(
+            User booker, LocalDateTime end, Pageable pageable); // PAST
 
-    List<Booking> findAllByBookerAndStartAfterOrderByStartDesc(
-            User booker, LocalDateTime start);  //FUTURE
+    Page<Booking> findAllByBookerAndStartAfterOrderByStartDesc(
+            User booker, LocalDateTime start, Pageable pageable);  //FUTURE
 
-    List<Booking> findAllByBookerAndStatusEqualsOrderByStartDesc(
-            User booker, BookingStatus status); //WAITING / REJECTED
+    Page<Booking> findAllByBookerAndStatusEqualsOrderByStartDesc(
+            User booker, BookingStatus status, Pageable pageable); //WAITING / REJECTED
 
 
-    List<Booking> findAllByItemOwnerOrderByStartDesc(
-            User owner); // ALL
+    Page<Booking> findAllByItemOwnerOrderByStartDesc(
+            User owner, Pageable pageable); // ALL
 
-    List<Booking> findAllByItemOwnerAndStartBeforeAndEndAfterOrderByStartDesc(
-            User owner, LocalDateTime start, LocalDateTime end); // CURRENT
+    Page<Booking> findAllByItemOwnerAndStartBeforeAndEndAfterOrderByStartDesc(
+            User owner, LocalDateTime start, LocalDateTime end, Pageable pageable); // CURRENT
 
-    List<Booking> findAllByItemOwnerAndEndBeforeOrderByStartDesc(
-            User owner, LocalDateTime end); // PAST
+    Page<Booking> findAllByItemOwnerAndEndBeforeOrderByStartDesc(
+            User owner, LocalDateTime end, Pageable pageable); // PAST
 
-    List<Booking> findAllByItemOwnerAndStartAfterOrderByStartDesc(
-            User owner, LocalDateTime start);  //FUTURE
+    Page<Booking> findAllByItemOwnerAndStartAfterOrderByStartDesc(
+            User owner, LocalDateTime start, Pageable pageable);  //FUTURE
 
-    List<Booking> findAllByItemOwnerAndStatusEqualsOrderByStartDesc(
-            User owner, BookingStatus status); //WAITING / REJECTED
+    Page<Booking> findAllByItemOwnerAndStatusEqualsOrderByStartDesc(
+            User owner, BookingStatus status, Pageable pageable); //WAITING / REJECTED
 
     Optional<Booking> findFirstByItemIdAndStatusAndStartBeforeOrderByStartDesc(
             int itemId, BookingStatus status, LocalDateTime dateTime);
@@ -46,6 +47,6 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     Optional<Booking> findFirstByItemIdAndStatusAndStartAfterOrderByStartAsc(
             int itemId, BookingStatus status, LocalDateTime dateTime);
 
-    Boolean existsByBookerIdAndItemIdAndEndIsBefore(
+    Boolean existsByBookerIdAndItemIdAndStartIsBefore(
             int userId, int itemId, LocalDateTime time);
 }

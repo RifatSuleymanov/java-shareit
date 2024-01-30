@@ -14,9 +14,9 @@ public interface BookingDao {
 
     Booking getInfoBooking(int id, int userId); // Получение данных о конкретном бронировании
 
-    List<Booking> getAllBookingOneUser(User user, String state); // Получение списка всеъ бронирований текущего пользователя
+    List<Booking> getAllBookingOneUser(User user, String state, int from, int size); // Получение списка всеъ бронирований текущего пользователя
 
-    List<Booking> getAllBookingOneOwner(User user, String state); // получение списка бронирований для всех вещей текущего пользователя
+    List<Booking> getAllBookingOneOwner(User user, String state, int from, int size);
 
     Booking getBookingById(Integer id);
 

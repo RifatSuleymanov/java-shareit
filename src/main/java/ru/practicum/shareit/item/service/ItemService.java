@@ -13,6 +13,7 @@ import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.dao.RequestDao;
 import ru.practicum.shareit.user.dao.UserDao;
 import ru.practicum.shareit.user.model.User;
 
@@ -27,23 +28,30 @@ public class ItemService {
     public final ItemDao itemDao;
     private final UserDao userDao;
     private final BookingDao bookingDao;
+    private final RequestDao requestDao;
 
     @Transactional
     public ItemDto addItems(ItemDto itemDto, int ownerId) {
         userDao.getUserById(ownerId);
         Item item = ItemMapper.toItem(itemDto, userDao.getUserById(ownerId));
+        if (itemDto.getRequestId() != null) {
+            item.setRequest(requestDao.getRequestById(itemDto.getRequestId()));
+        }
         return ItemMapper.toItemDto(itemDao.addItems(item));
     }
 
     @Transactional
     public ItemDto updateItems(int itemId, ItemDto itemDto, int ownerId) {
         Item item = ItemMapper.toItem(itemDto, userDao.getUserById(ownerId));
-        return ItemMapper.toItemDto(itemDao.updateItems(itemId, item));
+        if (itemDto.getRequestId() != null) {
+            item.setRequest(requestDao.getRequestById(itemDto.getRequestId()));
+        }
+        return ItemMapper.toItemDto(itemDao.updateItem(itemId, item));
     }
 
     @Transactional(readOnly = true)
     public ItemDto getItemsById(int itemId, int ownerId) {
-        Item item = itemDao.getItemsById(itemId);
+        Item item = itemDao.getItemById(itemId);
         ItemDto dto = ItemMapper.toItemDto(item);
         setDtoComments(dto);
         if (ownerId == item.getOwner().getId()) {
@@ -53,8 +61,8 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public List<ItemDto> getAllItemsOneUser(int ownerId) {
-        return itemDao.getAllItemsOneUser(ownerId)
+    public List<ItemDto> getAllItemsOneUser(int ownerId, int from, int size) {
+        return itemDao.getAllItemsOneUser(ownerId, from, size)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .map(this::setDtoComments)
@@ -63,11 +71,11 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public List<ItemDto> searchItemByText(String text) {
+    public List<ItemDto> searchItemByText(String text, int from, int size) {
         if (text.isBlank()) {
             return new ArrayList<ItemDto>();
         }
-        return itemDao.searchItemByText(text)
+        return itemDao.searchItemByText(text, from, size)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
@@ -76,7 +84,7 @@ public class ItemService {
     @Transactional
     public CommentDto addComment(int itemId, int userId, CommentDto commentDto) {
         bookingDao.checkUserBooking(userId, itemId);
-        Item item = itemDao.getItemsById(itemId);
+        Item item = itemDao.getItemById(itemId);
         User user = userDao.getUserById(userId);
         Comment comment = CommentMapper.toComment(commentDto, user, item);
         return CommentMapper.toCommentDto(itemDao.addComment(comment));

@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.Data;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.CascadeType;
@@ -33,6 +34,7 @@ public class Item {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner; // -влделец вещи
-    private Integer request; // если вещь была создана по запросу другого пользоватлея, то в этом поле будет хранится
-    // ссылка на соответсвующий запрос
+    @ManyToOne
+    @JoinColumn(name = "request_id")
+    private ItemRequest request;
 }
