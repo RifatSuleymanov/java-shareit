@@ -64,11 +64,11 @@ public class BookingControllerTest {
                 post("/bookings")
                         .content("{\n" +
                                 "    \"itemId\": 1,\n" +
-                                "    \"start\": \"2023-11-11T11:11:01\",\n" +
-                                "    \"end\": \"2023-11-11T11:11:02\"\n" +
+                                "    \"start\": \"2024-10-11T11:11:01\",\n" +
+                                "    \"end\": \"2024-11-11T11:11:02\"\n" +
                                 "}")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header("X-Sharer-User-Id", 2)
         ).andExpect(status().isOk());
     }
 
@@ -78,8 +78,8 @@ public class BookingControllerTest {
                 post("/bookings")
                         .content("{\n" +
                                 "    \"itemId\": 2,\n" +
-                                "    \"start\": \"2023-11-11T11:11:01\",\n" +
-                                "    \"end\": \"2023-11-11T11:11:02\"\n" +
+                                "    \"start\": \"2024-10-11T11:11:01\",\n" +
+                                "    \"end\": \"2024-11-11T11:11:02\"\n" +
                                 "}")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", 2)
@@ -92,8 +92,8 @@ public class BookingControllerTest {
                 post("/bookings")
                         .content("{\n" +
                                 "    \"itemId\": 1,\n" +
-                                "    \"start\": \"2023-11-11T11:11:01\",\n" +
-                                "    \"end\": \"2023-11-11T11:11:02\"\n" +
+                                "    \"start\": \"2024-10-11T11:11:01\",\n" +
+                                "    \"end\": \"2024-11-11T11:11:02\"\n" +
                                 "}")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", 2)
@@ -121,8 +121,8 @@ public class BookingControllerTest {
                 post("/bookings")
                         .content("{\n" +
                                 "    \"itemId\": 1,\n" +
-                                "    \"start\": \"2023-11-11T11:11:01\",\n" +
-                                "    \"end\": \"2023-11-11T11:11:02\"\n" +
+                                "    \"start\": \"2024-10-11T11:11:01\",\n" +
+                                "    \"end\": \"2024-11-11T11:11:02\"\n" +
                                 "}")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", 2)
@@ -142,8 +142,8 @@ public class BookingControllerTest {
                 post("/bookings")
                         .content("{\n" +
                                 "    \"itemId\": 1,\n" +
-                                "    \"start\": \"2023-11-11T11:11:01\",\n" +
-                                "    \"end\": \"2023-11-11T11:11:02\"\n" +
+                                "    \"start\": \"2024-10-11T11:11:01\",\n" +
+                                "    \"end\": \"2024-11-11T11:11:02\"\n" +
                                 "}")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", 2)

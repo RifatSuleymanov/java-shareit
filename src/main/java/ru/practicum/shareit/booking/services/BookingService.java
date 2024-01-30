@@ -31,7 +31,7 @@ public class BookingService {
         Item item = itemDao.getItemById(inputBookingDto.getItemId());
         if (!item.getAvailable()) {
             throw new BadRequestException("предмет не доступен для аренды");
-        } else if (item.getOwner().getId() == userId) {
+        } else if (item.getOwner().getId().equals(userId)) {
             throw new NotFoundException("вы не можете брать в аренду свои вещи");
         }
         User user = userDao.getUserById(userId);

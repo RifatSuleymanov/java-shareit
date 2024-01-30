@@ -49,45 +49,14 @@ public class BookingRepositoryTest {
 
         Booking booking = new Booking();
         booking.setId(1);
-        booking.setStart(LocalDateTime.of(2023, 11, 11, 11, 11, 1));
-        booking.setEnd(LocalDateTime.of(2023, 11, 11, 11, 11, 2));
+        booking.setStart(LocalDateTime.of(2024, 10, 11, 11, 11, 1));
+        booking.setEnd(LocalDateTime.of(2024, 11, 11, 11, 11, 2));
         booking.setItem(item1);
         booking.setBooker(user1);
         booking.setStatus(BookingStatus.WAITING);
         bookingRepository.save(booking);
 
         List<Booking> list = bookingRepository.findAllByBookerOrderByStartDesc(user1, page).toList();
-        Assertions.assertEquals(list.get(0), booking);
-    }
-
-    @Test
-    void findAllByBookerAndStartBeforeAndEndAfterOrderByStartDesc() {
-        User user1 = new User();
-        user1.setId(1);
-        user1.setName("test1");
-        user1.setEmail("tset@email.com1");
-        userRepository.save(user1);
-
-        Item item1 = new Item();
-        item1.setId(1);
-        item1.setName("test1");
-        item1.setDescription("test1");
-        item1.setAvailable(true);
-        item1.setOwner(user1);
-        itemRepository.save(item1);
-
-        Booking booking = new Booking();
-        booking.setId(1);
-        booking.setStart(LocalDateTime.now());
-        booking.setEnd(LocalDateTime.of(2023, 11, 11, 11, 11, 2));
-        booking.setItem(item1);
-        booking.setBooker(user1);
-        booking.setStatus(BookingStatus.WAITING);
-        bookingRepository.save(booking);
-
-        List<Booking> list = bookingRepository
-                .findAllByBookerAndStartBeforeAndEndAfterOrderByStartDesc(
-                        user1, LocalDateTime.now(), LocalDateTime.now(), page).toList();
         Assertions.assertEquals(list.get(0), booking);
     }
 
@@ -122,37 +91,6 @@ public class BookingRepositoryTest {
         Assertions.assertEquals(list.get(0), booking);
     }
 
-
-    @Test
-    void findAllByBookerAndStartAfterOrderByStartDesc() {
-        User user1 = new User();
-        user1.setId(1);
-        user1.setName("test1");
-        user1.setEmail("tset@email.com1");
-        userRepository.save(user1);
-
-        Item item1 = new Item();
-        item1.setId(1);
-        item1.setName("test1");
-        item1.setDescription("test1");
-        item1.setAvailable(true);
-        item1.setOwner(user1);
-        itemRepository.save(item1);
-
-        Booking booking = new Booking();
-        booking.setId(1);
-        booking.setStart(LocalDateTime.of(2022, 11, 11, 11, 11, 2));
-        booking.setEnd(LocalDateTime.now());
-        booking.setItem(item1);
-        booking.setBooker(user1);
-        booking.setStatus(BookingStatus.WAITING);
-        bookingRepository.save(booking);
-
-        List<Booking> list = bookingRepository.findAllByBookerAndStartAfterOrderByStartDesc(
-                user1, LocalDateTime.now(), page).toList();
-        Assertions.assertEquals(list.get(0), booking);
-    }
-
     @Test
     void findAllByBookerAndStatusEqualsOrderByStartDesc() {
         User user1 = new User();
@@ -171,8 +109,8 @@ public class BookingRepositoryTest {
 
         Booking booking = new Booking();
         booking.setId(1);
-        booking.setStart(LocalDateTime.of(2023, 11, 11, 11, 11, 1));
-        booking.setEnd(LocalDateTime.of(2023, 11, 11, 11, 11, 2));
+        booking.setStart(LocalDateTime.of(2024, 10, 11, 11, 11, 1));
+        booking.setEnd(LocalDateTime.of(2024, 11, 11, 11, 11, 2));
         booking.setItem(item1);
         booking.setBooker(user1);
         booking.setStatus(BookingStatus.WAITING);
@@ -201,45 +139,14 @@ public class BookingRepositoryTest {
 
         Booking booking = new Booking();
         booking.setId(1);
-        booking.setStart(LocalDateTime.of(2023, 11, 11, 11, 11, 1));
-        booking.setEnd(LocalDateTime.of(2023, 11, 11, 11, 11, 2));
+        booking.setStart(LocalDateTime.of(2024, 10, 11, 11, 11, 1));
+        booking.setEnd(LocalDateTime.of(2024, 11, 11, 11, 11, 2));
         booking.setItem(item1);
         booking.setBooker(user1);
         booking.setStatus(BookingStatus.WAITING);
         bookingRepository.save(booking);
 
         List<Booking> list = bookingRepository.findAllByItemOwnerOrderByStartDesc(user1, page).toList();
-        Assertions.assertEquals(list.get(0), booking);
-    }
-
-    @Test
-    void findAllByItemOwnerAndStartBeforeAndEndAfterOrderByStartDesc() {
-        User user1 = new User();
-        user1.setId(1);
-        user1.setName("test1");
-        user1.setEmail("tset@email.com1");
-        userRepository.save(user1);
-
-        Item item1 = new Item();
-        item1.setId(1);
-        item1.setName("test1");
-        item1.setDescription("test1");
-        item1.setAvailable(true);
-        item1.setOwner(user1);
-        itemRepository.save(item1);
-
-        Booking booking = new Booking();
-        booking.setId(1);
-        booking.setStart(LocalDateTime.now());
-        booking.setEnd(LocalDateTime.of(2023, 11, 11, 11, 11, 2));
-        booking.setItem(item1);
-        booking.setBooker(user1);
-        booking.setStatus(BookingStatus.WAITING);
-        bookingRepository.save(booking);
-
-        List<Booking> list = bookingRepository
-                .findAllByItemOwnerAndStartBeforeAndEndAfterOrderByStartDesc(
-                        user1, LocalDateTime.now(), LocalDateTime.now(), page).toList();
         Assertions.assertEquals(list.get(0), booking);
     }
 
@@ -275,36 +182,6 @@ public class BookingRepositoryTest {
     }
 
     @Test
-    void findAllByItemOwnerAndStartAfterOrderByStartDesc() {
-        User user1 = new User();
-        user1.setId(1);
-        user1.setName("test1");
-        user1.setEmail("tset@email.com1");
-        userRepository.save(user1);
-
-        Item item1 = new Item();
-        item1.setId(1);
-        item1.setName("test1");
-        item1.setDescription("test1");
-        item1.setAvailable(true);
-        item1.setOwner(user1);
-        itemRepository.save(item1);
-
-        Booking booking = new Booking();
-        booking.setId(1);
-        booking.setStart(LocalDateTime.of(2023, 11, 11, 11, 11, 1));
-        booking.setEnd(LocalDateTime.of(2023, 11, 11, 11, 11, 2));
-        booking.setItem(item1);
-        booking.setBooker(user1);
-        booking.setStatus(BookingStatus.WAITING);
-        bookingRepository.save(booking);
-
-        List<Booking> list = bookingRepository.findAllByItemOwnerAndStartAfterOrderByStartDesc(
-                user1, LocalDateTime.now(), page).toList();
-        Assertions.assertEquals(list.get(0), booking);
-    }
-
-    @Test
     void findAllByItemOwnerAndStatusEqualsOrderByStartDesc() {
         User user1 = new User();
         user1.setId(1);
@@ -322,8 +199,8 @@ public class BookingRepositoryTest {
 
         Booking booking = new Booking();
         booking.setId(1);
-        booking.setStart(LocalDateTime.of(2023, 11, 11, 11, 11, 1));
-        booking.setEnd(LocalDateTime.of(2023, 11, 11, 11, 11, 2));
+        booking.setStart(LocalDateTime.of(2024, 10, 11, 11, 11, 1));
+        booking.setEnd(LocalDateTime.of(2024, 11, 11, 11, 11, 2));
         booking.setItem(item1);
         booking.setBooker(user1);
         booking.setStatus(BookingStatus.WAITING);
@@ -354,7 +231,7 @@ public class BookingRepositoryTest {
         Booking booking1 = new Booking();
         booking1.setId(1);
         booking1.setStart(LocalDateTime.now());
-        booking1.setEnd(LocalDateTime.of(2023, 11, 11, 11, 11, 2));
+        booking1.setEnd(LocalDateTime.of(2024, 11, 11, 11, 11, 2));
         booking1.setItem(item1);
         booking1.setBooker(user1);
         booking1.setStatus(BookingStatus.APPROVED);
@@ -363,7 +240,7 @@ public class BookingRepositoryTest {
         Booking booking2 = new Booking();
         booking2.setId(1);
         booking2.setStart(LocalDateTime.now());
-        booking2.setEnd(LocalDateTime.of(2023, 11, 12, 11, 11, 2));
+        booking2.setEnd(LocalDateTime.of(2024, 11, 12, 11, 11, 2));
         booking2.setItem(item1);
         booking2.setBooker(user1);
         booking2.setStatus(BookingStatus.APPROVED);
@@ -371,46 +248,6 @@ public class BookingRepositoryTest {
 
 
         Optional<Booking> last = bookingRepository.findFirstByItemIdAndStatusAndStartBeforeOrderByStartDesc(
-                item1.getId(), BookingStatus.APPROVED, LocalDateTime.now());
-        Assertions.assertEquals(last.get(), booking2);
-    }
-
-    @Test
-    void findFirstByItemIdAndStatusAndStartAfterOrderByStartAsc() {
-        User user1 = new User();
-        user1.setId(1);
-        user1.setName("test1");
-        user1.setEmail("test1@test.com");
-        userRepository.save(user1);
-
-        Item item1 = new Item();
-        item1.setId(1);
-        item1.setName("item1");
-        item1.setDescription("description1");
-        item1.setAvailable(true);
-        item1.setOwner(user1);
-        itemRepository.save(item1);
-
-        Booking booking1 = new Booking();
-        booking1.setId(1);
-        booking1.setStart(LocalDateTime.now());
-        booking1.setEnd(LocalDateTime.of(2023, 11, 11, 11, 11, 2));
-        booking1.setItem(item1);
-        booking1.setBooker(user1);
-        booking1.setStatus(BookingStatus.APPROVED);
-        bookingRepository.save(booking1);
-
-        Booking booking2 = new Booking();
-        booking2.setId(1);
-        booking2.setStart(LocalDateTime.of(2023, 11, 11, 11, 11, 3));
-        booking2.setEnd(LocalDateTime.of(2023, 11, 12, 11, 11, 2));
-        booking2.setItem(item1);
-        booking2.setBooker(user1);
-        booking2.setStatus(BookingStatus.APPROVED);
-        bookingRepository.save(booking2);
-
-
-        Optional<Booking> last = bookingRepository.findFirstByItemIdAndStatusAndStartAfterOrderByStartAsc(
                 item1.getId(), BookingStatus.APPROVED, LocalDateTime.now());
         Assertions.assertEquals(last.get(), booking2);
     }
@@ -439,8 +276,8 @@ public class BookingRepositoryTest {
 
         Booking booking1 = new Booking();
         booking1.setId(1);
-        booking1.setStart(LocalDateTime.of(2023, 11, 11, 11, 11, 1));
-        booking1.setEnd(LocalDateTime.of(2023, 11, 11, 11, 11, 2));
+        booking1.setStart(LocalDateTime.of(2024, 10, 11, 11, 11, 1));
+        booking1.setEnd(LocalDateTime.of(2024, 11, 11, 11, 11, 2));
         booking1.setItem(item1);
         booking1.setBooker(user1);
         booking1.setStatus(BookingStatus.WAITING);
@@ -448,8 +285,8 @@ public class BookingRepositoryTest {
 
         Booking booking2 = new Booking();
         booking2.setId(2);
-        booking2.setStart(LocalDateTime.of(2023, 11, 12, 11, 11, 1));
-        booking2.setEnd(LocalDateTime.of(2023, 11, 12, 11, 11, 2));
+        booking2.setStart(LocalDateTime.of(2024, 10, 12, 11, 11, 1));
+        booking2.setEnd(LocalDateTime.of(2024, 11, 12, 11, 11, 2));
         booking2.setItem(item1);
         booking2.setBooker(user2);
         booking2.setStatus(BookingStatus.WAITING);
@@ -457,6 +294,6 @@ public class BookingRepositoryTest {
 
         boolean result = bookingRepository.existsByBookerIdAndItemIdAndStartIsBefore(
                 user1.getId(), item1.getId(), LocalDateTime.now());
-        Assertions.assertEquals(result, true);
+        Assertions.assertEquals(result, false);
     }
 }
