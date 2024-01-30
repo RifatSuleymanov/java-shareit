@@ -1,9 +1,10 @@
-package ru.practicum.shareit.user.dao;
+package ru.practicum.shareit.user.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.user.dao.UserDao;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
