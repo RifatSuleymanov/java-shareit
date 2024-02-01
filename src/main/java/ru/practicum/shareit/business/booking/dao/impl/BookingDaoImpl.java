@@ -7,13 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.business.booking.model.Booking;
-import ru.practicum.shareit.business.booking.repository.BookingRepository;
-import ru.practicum.shareit.businessInterface.BookingDao;
 import ru.practicum.shareit.business.booking.model.BookingStatus;
+import ru.practicum.shareit.business.booking.repository.BookingRepository;
 import ru.practicum.shareit.business.exception.BadRequestException;
 import ru.practicum.shareit.business.exception.NotFoundException;
 import ru.practicum.shareit.business.exception.UnknownStateException;
 import ru.practicum.shareit.business.user.model.User;
+import ru.practicum.shareit.businessInterface.BookingDao;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -134,6 +134,7 @@ public class BookingDaoImpl implements BookingDao {
     public Booking getBookingById(Integer id) {
         return bookingRepository.findById(id).orElseThrow(() -> new NotFoundException("такова запроса нет"));
     }
+
     @Transactional(readOnly = true)
     @Override
     public Optional<Booking> getLast(int id) {
