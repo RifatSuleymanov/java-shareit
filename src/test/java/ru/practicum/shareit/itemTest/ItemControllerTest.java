@@ -11,13 +11,18 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.business.booking.model.Booking;
+import ru.practicum.shareit.business.booking.repository.BookingRepository;
+import ru.practicum.shareit.business.item.repository.ItemRepository;
+import ru.practicum.shareit.business.item.service.ItemService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -33,6 +38,10 @@ public class ItemControllerTest {
     private MockMvc mockMvc;
     @Autowired
     BookingRepository bookingRepository;
+    @Autowired
+    ItemRepository itemRepository;
+    @Autowired
+    ItemService itemService;
 
     @BeforeEach
     void preset() throws Exception {
@@ -318,6 +327,4 @@ public class ItemControllerTest {
                         .header("X-Sharer-User-Id", 2)
         ).andExpect(status().is4xxClientError());
     }
-
-
 }

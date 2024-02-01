@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.DirtiesContext;
-import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.request.model.ItemRequest;
-import ru.practicum.shareit.request.repository.RequestRepository;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.business.item.repository.ItemRepository;
+import ru.practicum.shareit.business.request.model.ItemRequest;
+import ru.practicum.shareit.business.request.repository.RequestRepository;
+import ru.practicum.shareit.business.user.model.User;
+import ru.practicum.shareit.business.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
