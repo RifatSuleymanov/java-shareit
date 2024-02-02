@@ -11,10 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.business.booking.model.Booking;
-import ru.practicum.shareit.business.booking.repository.BookingRepository;
-import ru.practicum.shareit.business.item.repository.ItemRepository;
-import ru.practicum.shareit.business.item.service.ItemService;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.item.service.ItemService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
