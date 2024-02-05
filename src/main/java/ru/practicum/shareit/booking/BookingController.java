@@ -16,6 +16,7 @@ import ru.practicum.shareit.booking.dto.InputBookingDto;
 import ru.practicum.shareit.booking.services.BookingService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 /**
@@ -51,16 +52,20 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> getAllBookingOneUser(@RequestHeader(OWNER_ID) Integer userId,
-                                                 @RequestParam(defaultValue = "ALL") String state) { // Получение списка всех бронирований текущего пользователя.
+                                                 @RequestParam(defaultValue = "ALL") String state,
+                                                 @RequestParam(defaultValue = "0", required = false) Integer from,
+                                                 @Positive @RequestParam(defaultValue = "20", required = false) Integer size) { // Получение списка всех бронирований текущего пользователя.
         log.info("метод getAllBookingOneUser userId " + userId);
-        return bookingService.getAllBookingOneUser(userId, state);
+        return bookingService.getAllBookingOneUser(userId, state, from, size);
     }
 
     @GetMapping("/owner")
     public List<BookingDto> getAllBookingOneOwner(@RequestHeader(OWNER_ID) Integer userId,
-                                                  @RequestParam(defaultValue = "ALL") String state) { // Получение списка бронирований для всех вещей текущего пользователя.
+                                                  @RequestParam(defaultValue = "ALL") String state,
+                                                  @RequestParam(defaultValue = "0", required = false) Integer from,
+                                                  @Positive @RequestParam(defaultValue = "20", required = false) Integer size) { // Получение списка бронирований для всех вещей текущего пользователя.
         log.info("метод getAllBookingOneOwner userId " + userId);
-        return bookingService.getAllBookingOneOwner(userId, state);
+        return bookingService.getAllBookingOneOwner(userId, state, from, size);
 
     }
 }

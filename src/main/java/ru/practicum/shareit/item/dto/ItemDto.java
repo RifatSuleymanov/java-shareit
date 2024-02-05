@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @NoArgsConstructor(force = true)
-public final class ItemDto {
+public class ItemDto {
     private int id; // уникальный идентификатор вещи
     @NotBlank
     private String name; // краткое название
@@ -28,5 +28,6 @@ public final class ItemDto {
     private List<CommentDto> comments;
     private InputBookingDto lastBooking;
     private InputBookingDto nextBooking;
+    private Integer requestId;
 
 }

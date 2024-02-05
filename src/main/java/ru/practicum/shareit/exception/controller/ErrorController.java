@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exception.BadRequestException;
-import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.OwnerException;
 import ru.practicum.shareit.exception.UnknownStateException;
 import ru.practicum.shareit.exception.model.ErrorResponse;
 
@@ -18,18 +16,6 @@ public class ErrorController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerNotFoundException(final NotFoundException e) {
         return new ErrorResponse("NOT FOUND", e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handlerOwnerException(final OwnerException e) {
-        return new ErrorResponse("NOT FOUND", e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handlerConflict(final ConflictException e) {
-        return new ErrorResponse("CONFLICT", e.getMessage());
     }
 
     @ExceptionHandler

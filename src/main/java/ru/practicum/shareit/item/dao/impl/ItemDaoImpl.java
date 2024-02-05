@@ -1,22 +1,27 @@
-package ru.practicum.shareit.item.dao;
+package ru.practicum.shareit.item.dao.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.OwnerException;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.item.dao.ItemDao;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ItemDaoImpl implements ItemDao {
     private final ItemRepository itemRepository;
     private final CommentRepository commentRepository;
@@ -30,11 +35,11 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     @Transactional
-    public Item updateItems(int itemId, Item item) {
+    public Item updateItem(int itemId, Item item) {
         Item originalItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("по вашему id не была найдена вешь"));
-        if (originalItem.getOwner().getId() != item.getOwner().getId()) {
-            throw new OwnerException("вы не можете редактировать чужие объявления");
+        if (!Objects.equals(originalItem.getOwner().getId(), item.getOwner().getId())) {
+            throw new NotFoundException("вы не можете редактировать чужие объявления");
         }
         Optional.ofNullable(item.getName()).ifPresent(originalItem::setName);
         Optional.ofNullable(item.getDescription()).ifPresent(originalItem::setDescription);
@@ -44,24 +49,15 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     @Transactional(readOnly = true)
-    public Item getItemsById(int itemId) {
+    public Item getItemById(int itemId) {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("по вашему id не была найдена вещб"));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Item> getAllItemsOneUser(int ownerId) {
-        return itemRepository.findAll()
-                .stream()
-                .filter(item -> item.getOwner().getId() == ownerId)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public List<Item> searchItemByText(String text) {
-        return itemRepository.findAll()
+    public List<Item> searchItemByText(String text, int from, int size) {
+        return itemRepository.findAll(PageRequest.of(from, size))
                 .stream()
                 .filter(Item::getAvailable)
                 .filter(item -> containsText(item, text))
@@ -76,9 +72,27 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Comment> getAllCommentOneItem(int id) {
         return commentRepository.findByItemId(id);
+    }
+
+    @Override
+    public List<Item> getAllItemsByOneRequest(int requestId) {
+        return itemRepository.findAllByRequestId(requestId);
+    }
+
+    public List<Item> getAllItemsByMultipleRequests(List<Integer> requestIds) {
+        List<Item> items = new ArrayList<>();
+        for (Integer requestId : requestIds) {
+            items.addAll(itemRepository.findAllByRequestId(requestId));
+        }
+        return items;
+    }
+
+    @Override
+    public Page<Item> findAllByOwnerId(Integer ownerId, Pageable pageable) {
+        return itemRepository.findAllByOwnerId(ownerId, pageable);
     }
 
     private boolean containsText(Item item, String text) {
