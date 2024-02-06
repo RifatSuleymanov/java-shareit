@@ -82,17 +82,14 @@ public class ItemDaoImpl implements ItemDao {
         return itemRepository.findAllByRequestId(requestId);
     }
 
-    public List<Item> getAllItemsByMultipleRequests(List<Integer> requestIds) {
-        List<Item> items = new ArrayList<>();
-        for (Integer requestId : requestIds) {
-            items.addAll(itemRepository.findAllByRequestId(requestId));
-        }
-        return items;
-    }
-
     @Override
     public Page<Item> findAllByOwnerId(Integer ownerId, Pageable pageable) {
         return itemRepository.findAllByOwnerId(ownerId, pageable);
+    }
+
+    @Override
+    public List<Item> findAllByRequestIdIn(List<Integer> requestIds) {
+        return itemRepository.findAllByRequestIdIn(requestIds);
     }
 
     private boolean containsText(Item item, String text) {

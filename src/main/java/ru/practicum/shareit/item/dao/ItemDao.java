@@ -22,9 +22,11 @@ public interface ItemDao {
 
     List<Item> getAllItemsByOneRequest(int requestId);
 
-    List<Item> getAllItemsByMultipleRequests(List<Integer> requestIds);
+//    List<Item> getAllItemsByMultipleRequests(List<Integer> requestIds);
 
     Page<Item> findAllByOwnerId(Integer ownerId, Pageable pageable);
+
+    List<Item> findAllByRequestIdIn(List<Integer> requestIds);
 
 
 }
