@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dao.BookingDao;
@@ -154,5 +155,15 @@ public class BookingDaoImpl implements BookingDao {
         if (!bookingRepository.existsByBookerIdAndItemIdAndStartIsBefore(userId, itemId, LocalDateTime.now())) {
             throw new BadRequestException("вы не можете оставлять комментарии на вещь которой не пользовались");
         }
+    }
+
+    @Override
+    public Optional<Booking> findFirstByItemIdInAndStartLessThanEqualAndStatus(List<Integer> idItems, LocalDateTime now, BookingStatus approved, Sort sort) {
+        return bookingRepository.findFirstByItemIdInAndStartLessThanEqualAndStatus(idItems, now, approved, sort);
+    }
+
+    @Override
+    public Optional<Booking> findFirstByItemIdInAndStartAfterAndStatus(List<Integer> idItems, LocalDateTime now, BookingStatus approved, Sort sort) {
+        return bookingRepository.findFirstByItemIdInAndStartAfterAndStatus(idItems, now, approved, sort);
     }
 }

@@ -11,7 +11,6 @@ import ru.practicum.shareit.booking.dto.InputBookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
-import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.dao.ItemDao;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -25,11 +24,7 @@ import ru.practicum.shareit.user.dao.UserDao;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -43,7 +38,6 @@ public class ItemService {
     private final BookingDao bookingDao;
     private final RequestDao requestDao;
     private final CommentRepository commentRepository;
-    private final BookingRepository bookingRepository;
 
     @Transactional
     public ItemDto addItems(ItemDto itemDto, int ownerId) {
@@ -157,14 +151,14 @@ public class ItemService {
     }
 
     private void getAllBookingsByItem(List<ItemDto> itemDtoList, List<Integer> idItems) {
-        Map<Integer, InputBookingDto> lastBookings = bookingRepository.findFirstByItemIdInAndStartLessThanEqualAndStatus(
+        Map<Integer, InputBookingDto> lastBookings = bookingDao.findFirstByItemIdInAndStartLessThanEqualAndStatus(
                         idItems, LocalDateTime.now(), BookingStatus.APPROVED, Sort.by(DESC, "start"))
                 .stream()
                 .map(BookingMapper::toInputBookingDto)
                 .collect(Collectors.toMap(InputBookingDto::getItemId, Function.identity()));
         itemDtoList.forEach(i -> i.setLastBooking(lastBookings.get(i.getId())));
 
-        Map<Integer, InputBookingDto> nextBookings = bookingRepository.findFirstByItemIdInAndStartAfterAndStatus(
+        Map<Integer, InputBookingDto> nextBookings = bookingDao.findFirstByItemIdInAndStartAfterAndStatus(
                         idItems, LocalDateTime.now(), BookingStatus.APPROVED, Sort.by(Sort.Direction.ASC, "start"))
                 .stream()
                 .map(BookingMapper::toInputBookingDto)
