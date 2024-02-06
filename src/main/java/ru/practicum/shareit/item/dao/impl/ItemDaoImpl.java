@@ -7,14 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.dao.ItemDao;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.item.dao.ItemDao;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -82,17 +81,14 @@ public class ItemDaoImpl implements ItemDao {
         return itemRepository.findAllByRequestId(requestId);
     }
 
-    public List<Item> getAllItemsByMultipleRequests(List<Integer> requestIds) {
-        List<Item> items = new ArrayList<>();
-        for (Integer requestId : requestIds) {
-            items.addAll(itemRepository.findAllByRequestId(requestId));
-        }
-        return items;
-    }
-
     @Override
     public Page<Item> findAllByOwnerId(Integer ownerId, Pageable pageable) {
         return itemRepository.findAllByOwnerId(ownerId, pageable);
+    }
+
+    @Override
+    public List<Item> findAllByRequestIdIn(List<Integer> requestIds) {
+        return itemRepository.findAllByRequestIdIn(requestIds);
     }
 
     private boolean containsText(Item item, String text) {

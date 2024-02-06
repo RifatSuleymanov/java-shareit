@@ -51,7 +51,7 @@ public class RequestService {
                 .map(ItemRequest::getId)
                 .collect(Collectors.toList());
 
-        List<Item> items = itemDao.getAllItemsByMultipleRequests(requestIds);
+        List<Item> items = itemDao.findAllByRequestIdIn(requestIds);
 
         for (ItemRequest request : requests) {
             ItemRequestDto dto = RequestMapper.toRequestDto(request);
