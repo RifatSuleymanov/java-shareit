@@ -28,8 +28,10 @@ public interface BookingDao {
     Optional<Booking> getNext(int id);
 
     void checkUserBooking(Integer userId, Integer itemId);
+
     Optional<Booking> findFirstByItemIdInAndStartLessThanEqualAndStatus(List<Integer> idItems, LocalDateTime now,
                                                                         BookingStatus approved, Sort sort);
+
     Optional<Booking> findFirstByItemIdInAndStartAfterAndStatus(List<Integer> idItems, LocalDateTime now,
                                                                 BookingStatus approved, Sort sort);
 }
