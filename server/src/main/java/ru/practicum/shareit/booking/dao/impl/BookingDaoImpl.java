@@ -13,6 +13,7 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.UnknownStateException;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
@@ -65,7 +66,7 @@ public class BookingDaoImpl implements BookingDao {
                 bookingList = bookingRepository.findAllByBookerOrderByStartDesc(user, page);
                 break;
             case "CURRENT":
-                bookingList = bookingRepository.findAllByBookerAndStartBeforeAndEndAfterOrderByStartDesc(
+                bookingList = bookingRepository.findAllByBookerAndStartBeforeAndEndAfterOrderByStartAsc(
                         user, LocalDateTime.now(), LocalDateTime.now(), page);
                 break;
             case "PAST":
@@ -84,11 +85,15 @@ public class BookingDaoImpl implements BookingDao {
                 bookingList = bookingRepository.findAllByBookerAndStatusEqualsOrderByStartDesc(
                         user, BookingStatus.REJECTED, page);
                 break;
+            default:
+                throw new UnknownStateException("Unknown state:" + BookingStatus.UNSUPPORTED_STATUS);
         }
         return bookingList
                 .stream()
                 .collect(Collectors.toList());
     }
+
+
 
     @Transactional(readOnly = true)
     @Override
@@ -119,6 +124,8 @@ public class BookingDaoImpl implements BookingDao {
                 bookingList = bookingRepository.findAllByItemOwnerAndStatusEqualsOrderByStartDesc(
                         user, BookingStatus.REJECTED, page);
                 break;
+            default:
+                throw new UnknownStateException("Unknown state:" + BookingStatus.UNSUPPORTED_STATUS);
         }
         return bookingList
                 .stream()

@@ -12,8 +12,6 @@ import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.UnknownStateException;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 
 @Controller
 @RequestMapping("/bookings")
@@ -50,8 +48,8 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<Object> getAllBookingOneUser(@RequestHeader(user) Integer userId,
                                                        @RequestParam(defaultValue = "ALL") String state,
-                                                       @PositiveOrZero @RequestParam(defaultValue = "0", required = false) Integer from,
-                                                       @Positive @RequestParam(defaultValue = "20", required = false) Integer size) { // Получение списка всех бронирований текущего пользователя.
+                                                       @RequestParam(defaultValue = "0", required = false) Integer from,
+                                                       @RequestParam(defaultValue = "20", required = false) Integer size) { // Получение списка всех бронирований текущего пользователя.
         BookingState states = BookingState.from(state)
                 .orElseThrow(() -> new UnknownStateException("Неизвестный параметр " + state));
         log.info("метод getAllBookingOneUser userId " + userId);
@@ -61,8 +59,8 @@ public class BookingController {
     @GetMapping("/owner")
     public ResponseEntity<Object> getAllBookingOneOwner(@RequestHeader(user) Integer userId,
                                                         @RequestParam(defaultValue = "ALL") String state,
-                                                        @PositiveOrZero @RequestParam(defaultValue = "0", required = false) Integer from,
-                                                        @Positive @RequestParam(defaultValue = "20", required = false) Integer size) { // Получение списка бронирований для всех вещей текущего пользователя.
+                                                        @RequestParam(defaultValue = "0", required = false) Integer from,
+                                                        @RequestParam(defaultValue = "20", required = false) Integer size) { // Получение списка бронирований для всех вещей текущего пользователя.
         BookingState states = BookingState.from(state)
                 .orElseThrow(() -> new UnknownStateException("Неизвестный параметр " + state));
         log.info("метод getAllBookingOneOwner userId " + userId);

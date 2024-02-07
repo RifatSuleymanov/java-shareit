@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
     Page<Booking> findAllByBookerOrderByStartDesc(User booker, Pageable pageable); // ALL
 
-    Page<Booking> findAllByBookerAndStartBeforeAndEndAfterOrderByStartDesc(
+    Page<Booking> findAllByBookerAndStartBeforeAndEndAfterOrderByStartAsc(
             User booker, LocalDateTime start, LocalDateTime end, Pageable pageable); // CURRENT
 
 
