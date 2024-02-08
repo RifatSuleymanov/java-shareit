@@ -47,7 +47,7 @@ public class ItemController {
                                                      @PositiveOrZero @RequestParam(defaultValue = "0", required = false) Integer from,
                                                      @Positive @RequestParam(defaultValue = "20", required = false) Integer size) {
         log.info("метод getAllItemsOneUser . userId " + ownerId);
-        return itemClient.getAllItemsOneUser(ownerId, from, size);
+        return itemClient.getAllItemsOneUserOrderByIdAsc(ownerId, from, size);
     }
 
     @GetMapping("/search") // Поиск вещи потенциальным арендатором

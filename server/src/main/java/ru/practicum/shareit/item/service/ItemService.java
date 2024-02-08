@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Service
@@ -72,16 +73,13 @@ public class ItemService {
     @Transactional(readOnly = true)
     public List<ItemDto> getAllItemsOneUser(int ownerId, int from, int size) {
         Page<Item> items = itemDao.findAllByOwnerId(ownerId, PageRequest.of(from, size));
-        List<ItemDto> itemDtoList = new ArrayList<>();
-        for (Item item : items) {
-            ItemDto itemDto = ItemMapper.toItemDto(item);
-            itemDtoList.add(itemDto);
-        }
-        List<Integer> idItems = new ArrayList<>();
+        List<ItemDto> itemDtoList = items.stream()
+                .map(ItemMapper::toItemDto)
+                .collect(Collectors.toList());
 
-        for (ItemDto itemDto : itemDtoList) {
-            idItems.add(itemDto.getId());
-        }
+        List<Integer> idItems = itemDtoList.stream()
+                .map(ItemDto::getId)
+                .collect(Collectors.toList());
 
         getAllBookingsByItem(itemDtoList, idItems);
 
@@ -151,18 +149,24 @@ public class ItemService {
     }
 
     private void getAllBookingsByItem(List<ItemDto> itemDtoList, List<Integer> idItems) {
+        // Поиск первого бронирования (nextBooking) для каждого товара
+        Map<Integer, InputBookingDto> nextBookings = bookingDao.findFirstByItemIdInAndStartAfterAndStatus(
+                        idItems, LocalDateTime.now(), BookingStatus.APPROVED, Sort.by(ASC, "start"))
+                .stream()
+                .map(BookingMapper::toInputBookingDto)
+                .collect(Collectors.toMap(InputBookingDto::getItemId, Function.identity()));
+
+        // Установка найденного бронирования как nextBooking для соответствующего товара
+        itemDtoList.forEach(itemDto -> itemDto.setNextBooking(nextBookings.get(itemDto.getId())));
+
+        // Поиск последнего бронирования (lastBooking) для каждого товара
         Map<Integer, InputBookingDto> lastBookings = bookingDao.findFirstByItemIdInAndStartLessThanEqualAndStatus(
                         idItems, LocalDateTime.now(), BookingStatus.APPROVED, Sort.by(DESC, "start"))
                 .stream()
                 .map(BookingMapper::toInputBookingDto)
                 .collect(Collectors.toMap(InputBookingDto::getItemId, Function.identity()));
-        itemDtoList.forEach(i -> i.setLastBooking(lastBookings.get(i.getId())));
 
-        Map<Integer, InputBookingDto> nextBookings = bookingDao.findFirstByItemIdInAndStartAfterAndStatus(
-                        idItems, LocalDateTime.now(), BookingStatus.APPROVED, Sort.by(Sort.Direction.ASC, "start"))
-                .stream()
-                .map(BookingMapper::toInputBookingDto)
-                .collect(Collectors.toMap(InputBookingDto::getItemId, Function.identity()));
-        itemDtoList.forEach(i -> i.setNextBooking(nextBookings.get(i.getId())));
+        // Установка найденного бронирования как lastBooking для соответствующего товара
+        itemDtoList.forEach(itemDto -> itemDto.setLastBooking(lastBookings.get(itemDto.getId())));
     }
 }

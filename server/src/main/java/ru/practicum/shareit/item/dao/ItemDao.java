@@ -1,7 +1,9 @@
 package ru.practicum.shareit.item.dao;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
@@ -22,7 +24,8 @@ public interface ItemDao {
 
     List<Item> getAllItemsByOneRequest(int requestId);
 
-    Page<Item> findAllByOwnerId(Integer ownerId, Pageable pageable);
 
     List<Item> findAllByRequestIdIn(List<Integer> requestIds);
+
+    Page<Item> findAllByOwnerId(Integer ownerId, Pageable pageable);
 }

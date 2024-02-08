@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dao.ItemDao;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
@@ -82,13 +83,13 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public Page<Item> findAllByOwnerId(Integer ownerId, Pageable pageable) {
-        return itemRepository.findAllByOwnerId(ownerId, pageable);
+    public List<Item> findAllByRequestIdIn(List<Integer> requestIds) {
+        return itemRepository.findAllByRequestIdIn(requestIds);
     }
 
     @Override
-    public List<Item> findAllByRequestIdIn(List<Integer> requestIds) {
-        return itemRepository.findAllByRequestIdIn(requestIds);
+    public Page<Item> findAllByOwnerId(Integer ownerId, Pageable pageable) {
+        return itemRepository.findAllByOwnerIdOrderByIdAsc(ownerId, pageable);
     }
 
     private boolean containsText(Item item, String text) {

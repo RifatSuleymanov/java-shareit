@@ -39,7 +39,7 @@ public class ItemClient extends BaseClient {
         return get("/" + itemId, ownerId);
     }
 
-    public ResponseEntity<Object> getAllItemsOneUser(Integer ownerId, Integer from, Integer size) {
+    public ResponseEntity<Object> getAllItemsOneUserOrderByIdAsc(Integer ownerId, Integer from, Integer size) {
         Map<String, Object> parameters = Map.of(
                 "from", from,
                 "size", size

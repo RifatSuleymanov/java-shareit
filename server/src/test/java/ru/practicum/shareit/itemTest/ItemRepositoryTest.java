@@ -82,7 +82,7 @@ public class ItemRepositoryTest {
         itemRepository.save(item2);
 
         PageRequest page = PageRequest.of(0, 2);
-        List<Item> items = itemRepository.findAllByOwnerId(1, page).toList();
+        List<Item> items = itemRepository.findAllByOwnerIdOrderByIdAsc(1, page).toList();
         Assertions.assertEquals(items.get(0), item1);
         Assertions.assertEquals(items.get(1), item2);
 
