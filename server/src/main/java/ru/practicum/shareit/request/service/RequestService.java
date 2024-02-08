@@ -76,7 +76,7 @@ public class RequestService {
         return dto;
     }
 
-    public void setRequestItems(ItemRequestDto itemRequestDto, List<Item> items) {
+    private void setRequestItems(ItemRequestDto itemRequestDto, List<Item> items) {
         itemRequestDto.setItems(items.stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList())

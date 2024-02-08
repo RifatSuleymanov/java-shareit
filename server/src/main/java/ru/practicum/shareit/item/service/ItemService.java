@@ -149,24 +149,18 @@ public class ItemService {
     }
 
     private void getAllBookingsByItem(List<ItemDto> itemDtoList, List<Integer> idItems) {
-        // Поиск первого бронирования (nextBooking) для каждого товара
-        Map<Integer, InputBookingDto> nextBookings = bookingDao.findFirstByItemIdInAndStartAfterAndStatus(
-                        idItems, LocalDateTime.now(), BookingStatus.APPROVED, Sort.by(ASC, "start"))
-                .stream()
-                .map(BookingMapper::toInputBookingDto)
-                .collect(Collectors.toMap(InputBookingDto::getItemId, Function.identity()));
-
-        // Установка найденного бронирования как nextBooking для соответствующего товара
-        itemDtoList.forEach(itemDto -> itemDto.setNextBooking(nextBookings.get(itemDto.getId())));
-
-        // Поиск последнего бронирования (lastBooking) для каждого товара
         Map<Integer, InputBookingDto> lastBookings = bookingDao.findFirstByItemIdInAndStartLessThanEqualAndStatus(
                         idItems, LocalDateTime.now(), BookingStatus.APPROVED, Sort.by(DESC, "start"))
                 .stream()
                 .map(BookingMapper::toInputBookingDto)
                 .collect(Collectors.toMap(InputBookingDto::getItemId, Function.identity()));
+        itemDtoList.forEach(i -> i.setLastBooking(lastBookings.get(i.getId())));
 
-        // Установка найденного бронирования как lastBooking для соответствующего товара
-        itemDtoList.forEach(itemDto -> itemDto.setLastBooking(lastBookings.get(itemDto.getId())));
+        Map<Integer, InputBookingDto> nextBookings = bookingDao.findFirstByItemIdInAndStartAfterAndStatus(
+                        idItems, LocalDateTime.now(), BookingStatus.APPROVED, Sort.by(Sort.Direction.ASC, "start"))
+                .stream()
+                .map(BookingMapper::toInputBookingDto)
+                .collect(Collectors.toMap(InputBookingDto::getItemId, Function.identity()));
+        itemDtoList.forEach(i -> i.setNextBooking(nextBookings.get(i.getId())));
     }
 }
