@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.item.service.impl.ItemServiceImpl;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,7 +36,7 @@ public class ItemControllerTest {
     @Autowired
     ItemRepository itemRepository;
     @Autowired
-    ItemService itemService;
+    ItemServiceImpl itemService;
 
     @BeforeEach
     void preset() throws Exception {
