@@ -19,17 +19,6 @@ public class BookingMapper {
         return dto;
     }
 
-    public static Booking toBooking(BookingDto dto) {
-        Booking booking = new Booking();
-        booking.setId(dto.getId());
-        booking.setStart(dto.getStart());
-        booking.setEnd(dto.getEnd());
-        booking.setItem(dto.getItem());
-        booking.setBooker(dto.getBooker());
-        booking.setStatus(dto.getStatus());
-        return booking;
-    }
-
     public static Booking fromInputBookingDtoToBooking(InputBookingDto inputBookingDto, Item item, User user) {
         Booking booking = new Booking();
         booking.setId(inputBookingDto.getId());
